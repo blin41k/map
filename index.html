@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Студенческая интерактивная карта МИИГАиК</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- шапка -->
+    <header class="block hero">
+      <h1>Студенческая интерактивная карта МИИГАиК</h1>
+      <p class="hero-text">
+        Полезные места рядом с университетом общежитиями метро кафе магазинами аптеками и другими объектами
+      </p>
+
+      <div class="hero-tags" id="top_tags">
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>JavaScript</span>
+        <span>JSON</span>
+        <span>Flask API</span>
+      </div>
+    </header>
+
+    <!-- категории -->
+    <section class="block category-nav">
+      <h2>Категории объектов</h2>
+      <p>
+        В проекте собраны основные места которые могут пригодиться студенту рядом с МИИГАиК и общежитием
+      </p>
+
+      <div class="category-list">
+        <article class="category-card type-university">
+          <span class="category-card__name">корпуса</span>
+          <span class="category-card__text">учебные здания и объекты МИИГАиК</span>
+        </article>
+
+        <article class="category-card type-dormitory">
+          <span class="category-card__name">общежития</span>
+          <span class="category-card__text">места проживания студентов</span>
+        </article>
+
+        <article class="category-card type-metro">
+          <span class="category-card__name">метро</span>
+          <span class="category-card__text">станции рядом с нужными районами</span>
+        </article>
+
+        <article class="category-card type-food">
+          <span class="category-card__name">еда</span>
+          <span class="category-card__text">кафе столовые и места где можно поесть</span>
+        </article>
+
+        <article class="category-card type-shop">
+          <span class="category-card__name">магазины</span>
+          <span class="category-card__text">продукты и полезные покупки рядом</span>
+        </article>
+
+        <article class="category-card type-pharmacy">
+          <span class="category-card__name">аптеки</span>
+          <span class="category-card__text">места где можно купить лекарства</span>
+        </article>
+
+        <article class="category-card type-copycenter">
+          <span class="category-card__name">копицентры</span>
+          <span class="category-card__text">печать документов и учебных материалов</span>
+        </article>
+
+        <article class="category-card type-other">
+          <span class="category-card__name">другое</span>
+          <span class="category-card__text">остальные полезные места для студентов</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- управление -->
+    <div class="work-panel" id="work_panel">
+      <section class="block control-block">
+        <h2>Управление</h2>
+
+        <div class="form-row">
+          <label for="search_input">Название объекта</label>
+          <input
+            id="search_input"
+            type="text"
+            placeholder="например аптека метро общежитие"
+            autocomplete="off"
+          >
+          <p class="small-text">Поиск идет по названию адресу и описанию объекта</p>
+        </div>
+
+        <div class="form-row">
+          <div class="title-line">
+            <label>Категории</label>
+            <button class="clear-button" id="reset_button" type="button">сбросить</button>
+          </div>
+
+          <!-- фильтры -->
+          <div class="filter-buttons" id="filter_buttons">
+            <button class="filter-button active" type="button" data-type="all">все</button>
+            <button class="filter-button" type="button" data-type="university">корпуса</button>
+            <button class="filter-button" type="button" data-type="dormitory">общежития</button>
+            <button class="filter-button" type="button" data-type="metro">метро</button>
+            <button class="filter-button" type="button" data-type="food">еда</button>
+            <button class="filter-button" type="button" data-type="shop">магазины</button>
+            <button class="filter-button" type="button" data-type="pharmacy">аптеки</button>
+            <button class="filter-button" type="button" data-type="copycenter">копицентры</button>
+            <button class="filter-button" type="button" data-type="other">другое</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>Район карты</label>
+          <div class="area-buttons" id="area_buttons">
+            <button type="button" data-area="miigaik">район миигаик</button>
+            <button type="button" data-area="studak">район общежития №2</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- карта -->
+      <section class="block visual-block">
+        <div class="map-head">
+          <div>
+            <span class="guide-label">интерактивная карта</span>
+            <h2 id="map_title">Карта рядом с МИИГАиК</h2>
+            <p id="map_text">Точки берутся из JSON-файла и показываются на карте Яндекса</p>
+          </div>
+
+          <div class="map-note" id="map_note"></div>
+        </div>
+
+        <div class="map-box" id="map_box">
+          <div id="map" class="real-map"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- карточка объекта -->
+    <section class="block selected-block">
+      <div class="selected-head">
+        <div>
+          <span class="guide-label">выбранный объект</span>
+          <h2>Карточка объекта</h2>
+        </div>
+      </div>
+
+      <article class="info-card" id="info_card">
+        <p id="object_empty">Выберите точку на карте или объект в списке</p>
+
+        <div id="object_content" hidden>
+          <span class="info_type" id="object_category"></span>
+          <h3 id="object_name"></h3>
+          <p class="object_line" id="object_address"></p>
+          <p id="object_description"></p>
+
+          <div class="info_row">
+            <span class="info_name">расстояние</span>
+            <p id="object_distance"></p>
+          </div>
+
+          <div class="info_row">
+            <span class="info_name">время</span>
+            <p id="object_time"></p>
+          </div>
+
+          <button class="map_button" id="object_button" type="button" data-action="show_map">
+            показать на карте
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <!-- список объектов -->
+    <section class="block list-block">
+      <div class="list-head">
+        <div>
+          <span class="guide-label">объекты</span>
+          <h2>Полезные места для студентов</h2>
+        </div>
+
+        <div class="list-info">
+          <span id="place_count">0 объектов</span>
+
+          <!-- категории -->
+          <div class="category-line" id="category_line">
+            <span class="category_mark type-university">корпуса</span>
+            <span class="category_mark type-dormitory">общежития</span>
+            <span class="category_mark type-metro">метро</span>
+            <span class="category_mark type-food">еда</span>
+            <span class="category_mark type-shop">магазины</span>
+            <span class="category_mark type-pharmacy">аптеки</span>
+            <span class="category_mark type-copycenter">копицентры</span>
+            <span class="category_mark type-other">другое</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="places-list" id="places_list"></div>
+    </section>
+
+    <!-- о проекте -->
+    <section class="block about-block">
+      <h2>О проекте</h2>
+      <div class="about-grid">
+        <article>
+          <h3>Фронтенд</h3>
+          <p>HTML отвечает за структуру страницы CSS за внешний вид а JavaScript за поиск фильтры карту и карточки</p>
+        </article>
+
+        <article>
+          <h3>Данные</h3>
+          <p>Все объекты лежат в файле data/objects.json поэтому сайт можно открыть через GitHub Pages</p>
+        </article>
+
+        <article>
+          <h3>Backend</h3>
+          <p>Flask API лежит отдельно в папке backend и нужен только для локальной проверки backend-части</p>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=f8ca3f76-8719-4a64-8f7d-50af0af663e7&lang=ru_RU"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
